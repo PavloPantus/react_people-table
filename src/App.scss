@@ -1,0 +1,73 @@
+.App {
+  background-color: rgba(235, 255, 32, 0.09);
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input {
+  background-color: azure;
+  width: 100px;
+  height: 20px;
+  padding: 5px;
+  color: #a50007;
+  border: 1px solid darkred;
+  box-shadow: -22px -15px 57px -34px rgba(255,0,255,1);
+
+  &::placeholder {
+    color: #a50007;
+  }
+
+  &_search-in-table {
+
+  }
+}
+
+
+.PeopleTable {
+  border: 1px solid blue;
+  border-collapse: collapse;
+  text-align: center;
+  margin-top: 20px;
+  min-width: 700px;
+
+
+    &__heading{
+      border: 1px solid blue;
+      cursor: pointer;
+      &:hover{
+        transform: scale(1.1);
+      }
+      &:active{
+        background-color: red;
+      }
+    }
+
+  &__row{
+    border: 1px solid blue;
+
+  }
+
+    &__description{
+      border: 1px solid blue;
+      padding: 5px;
+   }
+}
+
+.Person {
+  border: 1px solid blue;
+  cursor: pointer;
+  &--selected {
+    background-color: rgba(48, 99, 99, 0.13);
+  }
+}
+
+.born-before-1650 {
+  text-decoration: line-through;
+}
+
+.lived-for-65-and-more {
+  color: green;
+}
