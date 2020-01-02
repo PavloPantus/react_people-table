@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const classNames = require('classnames');
 
-const Person = ({ person, selectedPerson, setSelectedPerson }) => {
+const Person = ({ person, selectedPerson }) => {
   const history = useHistory();
   const location = useLocation();
 
@@ -28,7 +28,6 @@ const Person = ({ person, selectedPerson, setSelectedPerson }) => {
           pathname: `${person.name.split(' ').join('-').toLowerCase()}`,
           search: location.search,
         });
-        setSelectedPerson(person.name.toLowerCase());
       }}
     >
 
@@ -67,7 +66,6 @@ Person.propTypes = {
     age: PropTypes.number.isRequired,
   }).isRequired,
   selectedPerson: PropTypes.string.isRequired,
-  setSelectedPerson: PropTypes.func.isRequired,
 };
 
 export default Person;

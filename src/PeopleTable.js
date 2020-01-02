@@ -47,7 +47,10 @@ const PeopleTable = () => {
     setActiveSortMethod(params.get('sortBy'));
   }, [params.toString()]);
   useEffect(() => {
-    setSelectedPerson(match.params.person.split('-').join(' '));
+    setSelectedPerson(
+      match.params.person !== undefined
+        ? match.params.person.split('-').join(' ') : ''
+    );
   }, [match.params.person]);
 
   const getSortMethod = (sortBy) => {
@@ -144,7 +147,6 @@ const PeopleTable = () => {
                   person={person}
                   key={person.id}
                   selectedPerson={selectedPerson}
-                  setSelectedPerson={setSelectedPerson}
                 />
               )
             )}
