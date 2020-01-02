@@ -43,6 +43,13 @@ const PeopleTable = () => {
     , []
   );
 
+  useEffect(() => {
+    setActiveSortMethod(params.get('sortBy'));
+  }, [params.toString()]);
+  useEffect(() => {
+    setSelectedPerson(match.params.person.split('-').join(' '));
+  }, [match.params.person]);
+
   const getSortMethod = (sortBy) => {
     if (sortBy === '') {
       return () => 1;
