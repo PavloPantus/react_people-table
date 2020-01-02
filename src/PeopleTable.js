@@ -79,16 +79,14 @@ const PeopleTable = () => {
         type="text"
         className="input input_search-in-table"
         onClick={() => {
-          params.delete('query');
-          params.append('query', '');
-          history.push({
-            search: `?${params.toString()}`,
-          });
           setFilterBy('');
         }}
         onChange={(event) => {
-          params.delete('query');
-          params.append('query', event.target.value.trim().toLowerCase());
+          params.set('query', event.target.value.trim().toLowerCase());
+          if (event.target.value.trim().toLowerCase().length === 0) {
+            params.delete('query');
+          }
+
           history.push({
             search: `?${params.toString()}`,
           });

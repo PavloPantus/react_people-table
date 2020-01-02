@@ -11,7 +11,6 @@ const Person = ({ person, selectedPerson, setSelectedPerson }) => {
 
   return (
     <tr
-      /* tabIndex="0" */
       className={
         classNames(
           [{ 'Person--male': person.sex === 'm' },
@@ -25,14 +24,12 @@ const Person = ({ person, selectedPerson, setSelectedPerson }) => {
         )
       }
       onClick={() => {
-        /* console.log(params) */
         history.push({
           pathname: `${person.name.split(' ').join('-').toLowerCase()}`,
           search: location.search,
         });
         setSelectedPerson(person.name.toLowerCase());
       }}
-      /* onBlur={()=>{setSelectedPerson(0)}} */
     >
 
       <td className="PeopleTable__description">{person.id}</td>
