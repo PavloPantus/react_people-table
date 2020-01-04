@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { withRouter, useHistory,
   useLocation, useRouteMatch } from 'react-router-dom';
 import Person from './Person';
@@ -15,9 +15,12 @@ const PeopleTable = () => {
     match.params.person !== undefined
       ? match.params.person.split('-').join(' ') : ''
   );
+
   const [filterBy, setFilterBy] = useState(
     params.get('query') !== null ? params.get('query') : ''
   );
+  const [visibleQuery, setVisibleQuery] = useState('');
+
   const [people, setPeople] = useState([]);
   const [activeSortMethod, setActiveSortMethod] = useState(
     params.get('sortBy') !== null ? params.get('sortBy') : ''
@@ -65,15 +68,41 @@ const PeopleTable = () => {
     return (a, b) => a[sortBy] - b[sortBy];
   };
 
-  const visiblePeople = [...people]
-    .filter(
+  const getFilteredPeople = (peopleToFilter, filterPeopleToFilterBy) => (
+    peopleToFilter.filter(
       person => (person.name + person.mother + person.father)
-        .toLowerCase().includes(filterBy)
-    );
+        .toLowerCase().includes(filterPeopleToFilterBy)
+    ));
+
+  const visiblePeople = useMemo(() => getFilteredPeople(people, filterBy),
+    [filterBy, people]);
 
   if (visiblePeople.length > 0) {
     visiblePeople.sort(getSortMethod(activeSortMethod));
   }
+
+  const debounce = (callback, delay) => {
+    let timer = 0;
+
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(callback, delay, ...args);
+    };
+  };
+
+  const inpuHandler = (inputValue) => {
+    params.set('query', inputValue.trim().toLowerCase());
+    if (inputValue.trim().toLowerCase().length === 0) {
+      params.delete('query');
+    }
+
+    history.push({
+      search: `?${params.toString()}`,
+    });
+    setFilterBy(inputValue.trim().toLowerCase());
+  };
+
+  const debouncedInputHandler = useCallback(debounce(inpuHandler, 1000), []);
 
   return (
     <>
@@ -85,6 +114,7 @@ const PeopleTable = () => {
         {visiblePeople.length}
       </p>
       <input
+        value={visibleQuery}
         placeholder="type for filtering"
         type="text"
         className="input input_search-in-table"
@@ -92,15 +122,8 @@ const PeopleTable = () => {
           setFilterBy('');
         }}
         onChange={(event) => {
-          params.set('query', event.target.value.trim().toLowerCase());
-          if (event.target.value.trim().toLowerCase().length === 0) {
-            params.delete('query');
-          }
-
-          history.push({
-            search: `?${params.toString()}`,
-          });
-          setFilterBy(event.target.value.trim().toLowerCase());
+          setVisibleQuery(event.target.value);
+          debouncedInputHandler(event.target.value);
         }}
       />
       <table className="PeopleTable">
